@@ -1,0 +1,39 @@
+This is a standard .gitignore file for .NET and JetBrains Rider projects.
+It tells Git to ignore temporary files, build artifacts, and user-specific settings.
+User-specific files
+
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+Build results
+
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+Rider specific
+
+.idea/
+*.sln.iml
+resharper-host/
+Other
+
+/packages
+/TestResults
+*.vspscc
+*.vssscc
+.vs
+*.pidb
+*.log
+*.swp
+*~
