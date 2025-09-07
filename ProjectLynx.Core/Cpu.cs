@@ -1,5 +1,6 @@
 ﻿namespace ProjectLynx.Core;
 
-public class Class1
+public class Cpu
 {
+    
 }

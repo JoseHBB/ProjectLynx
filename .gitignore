@@ -37,3 +37,6 @@ Other
 *.log
 *.swp
 *~
+
+.gb
+.gbc

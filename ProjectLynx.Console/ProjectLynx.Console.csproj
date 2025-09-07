@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ProjectLynx.Core\ProjectLynx.Core.csproj" />
+      <ProjectReference Include="..\ProjectLynx.Rom\ProjectLynx.Rom.csproj" />
     </ItemGroup>
 
 </Project>
