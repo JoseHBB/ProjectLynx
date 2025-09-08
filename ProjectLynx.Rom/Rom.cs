@@ -112,5 +112,109 @@ public class Rom(string romPath)
         }
         Console.WriteLine(top);
         Console.WriteLine(bottom);
+
+        if (_data[0x0146] != 0x03)
+        {
+            Console.WriteLine("This game does not support Super GameBoy functions");
+        }
+        else
+        {
+            Console.WriteLine("This game does support Super GameBoy functions");
+        }
+        
+        if (_data[0x0147] == 0x00)
+        {
+            Console.WriteLine("This game is ROM only");
+        }
+        else
+        {
+            Console.WriteLine("This game is not ROM only");
+        }
+        
+        var romSize = _data[0x0148];
+        
+        Console.WriteLine($"The ROM size is: {32 * (1 << romSize)} KiB");
+
+        switch (_data[0x0149])
+        {
+            case 0x00:
+                Console.WriteLine("This has no RAM");
+                break;
+            case 0x01:
+                Console.WriteLine("Unused");
+                break;
+            case 0x02:
+                Console.WriteLine("This has 8Kib of RAM.");
+                break;
+            default:
+                Console.WriteLine("The RAM byte is wrong.");
+                break;
+        }
+
+        if (_data[0x014A] == 0x00)
+        {
+            Console.WriteLine("This game is for Japan and overseas.");
+        }
+        else
+        {
+            Console.WriteLine("This game is for overseas only.");
+        }
+        
+        if (_data[0x014B] == 0x01)
+        {
+            Console.WriteLine("This game is published by Nintendo.");
+        }
+        else
+        {
+            Console.WriteLine("This game is NOT published by Nintendo.");
+        }
+        
+        Console.WriteLine($"The Mask ROM version is: {_data[0x014C]}");
+
+        byte checksum = 0;
+
+        for (var address = 0x0134; address <= 0x014C; address++)
+        {
+            checksum = (byte)(checksum - _data[address] - 1);
+        }
+
+        Console.WriteLine($"The checksum is: {checksum}");
+        
+        if (checksum == _data[0x014D])
+        {
+            Console.WriteLine("The checksum is correct");
+        }
+        else
+        {
+            Console.WriteLine("The checksum is not correct");
+        }
+
+        index = 0;
+
+        UInt16 globalChecksum = 0;
+        
+        while (index < _data.Length)
+        {
+            if (index == 0x014E)
+            {
+                index += 2;
+                continue;
+            }
+
+            globalChecksum += _data[index];
+            
+            index++;
+        }
+
+        var globalCheck = (UInt16)(_data[0x014E] << 8) | _data[0x014F];
+
+        if (globalChecksum == globalCheck)
+        {
+            Console.WriteLine("The global checksum is correct");
+        }
+        else
+        {
+            Console.WriteLine("The global checksum is not correct");
+        }
     }
 }
