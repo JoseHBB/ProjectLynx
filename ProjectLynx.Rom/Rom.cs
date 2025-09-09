@@ -4,6 +4,11 @@ public class Rom(string romPath)
 {
     private readonly byte[] _data = File.ReadAllBytes(romPath);
 
+    public byte GetByteFromAddress(ushort address)
+    {
+        return _data[address];
+    }
+
     public void PrintHeaderData()
     {
         //Print Title of the game
