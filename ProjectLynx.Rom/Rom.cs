@@ -191,7 +191,7 @@ public class Rom(string romPath)
 
         index = 0;
 
-        UInt16 globalChecksum = 0;
+        ushort globalChecksum = 0;
         
         while (index < _data.Length)
         {
@@ -206,7 +206,7 @@ public class Rom(string romPath)
             index++;
         }
 
-        var globalCheck = (UInt16)(_data[0x014E] << 8) | _data[0x014F];
+        var globalCheck = (ushort)(_data[0x014E] << 8) | _data[0x014F];
 
         if (globalChecksum == globalCheck)
         {
