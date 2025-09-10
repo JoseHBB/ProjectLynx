@@ -4,9 +4,9 @@ public class Rom(string romPath)
 {
     private readonly byte[] _data = File.ReadAllBytes(romPath);
 
-    public byte GetByteFromAddress(ushort address)
+    public byte[] GetRom()
     {
-        return _data[address];
+        return _data;
     }
 
     public void PrintHeaderData()
