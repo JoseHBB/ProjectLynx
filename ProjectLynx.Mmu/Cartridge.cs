@@ -9,8 +9,16 @@ public class Cartridge(string romPath)
         return  _data[address];
     }
 
+    public void WriteDataToRom(ushort address, byte data)
+    {
+        return;
+    }
     public byte GetDataFromExternalRam(ushort address)
     {
         return _externalRam[address];
+    }
+    public void WriteDataToExternalRam(ushort address, byte data)
+    {
+        _externalRam[address] = data;
     }
 }

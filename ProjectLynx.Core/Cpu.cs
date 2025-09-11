@@ -1,7 +1,8 @@
 ﻿namespace ProjectLynx.Core;
 
-public class Cpu
+public class Cpu(Mmu.Mmu mmu)
 {
+    private Mmu.Mmu _mmu = mmu;
     //Special Purpose Registers
     public ushort Pc { get; private set; } //Program Counter
     public ushort Sp { get; private set; } //Stack Pointer 
@@ -64,7 +65,242 @@ public class Cpu
         }
         Af = tempAf;
     }
+    public void RunOpcode(byte opcode)
+    {
+        
+    }
+    
+    public void NoOp() => Pc++;
 
+    public void HlInc()
+    {
+        var tempHl = Hl;
+        tempHl.Word++;
+        Hl = tempHl;
+    }
+    
+    public void HlDec()
+    {
+        var tempHl = Hl;
+        tempHl.Word--;
+        Hl = tempHl;
+    }
+    
+    public void LoadRegister(ref byte registerWrite, ref byte registerRead) //LD r8,r8
+    {
+        registerWrite = registerRead;
+        Pc++;
+    }
+    
+    public void LoadImmediate8(ref byte register) //LD r8,n8
+    {
+        register = _mmu.GetByteFromAddress((ushort)(Pc + 1));
+        Pc += 2;
+    }
+    
+    public void LoadImmediate16(ref RegisterPair registerPair) //LD r16,n16
+    {
+        registerPair.Low =  _mmu.GetByteFromAddress((ushort)(Pc + 1));
+        registerPair.High =  _mmu.GetByteFromAddress((ushort)(Pc + 2));
+        Pc += 3;
+    }
+    
+    public void WriteMemoryLocation(ref byte register) //LD [HL],r8
+    {
+        _mmu.WriteByteToAddress(Hl.Word, register);
+        Pc += 2;
+    }
+
+    public void WriteImmediateMemoryLocation() //LD [HL],n8
+    {
+        var value = _mmu.GetByteFromAddress((ushort)(Pc + 1));
+        _mmu.WriteByteToAddress(Hl.Word, value);
+        Pc += 3;
+    }
+    
+    public void LoadMemoryLocation(ref byte register) //LD r8,[HL]
+    {
+        register = _mmu.GetByteFromAddress(Hl.Word);
+        Pc += 2;
+    }
+    
+    public void WriteMemoryLocationA(ref RegisterPair registerPair) //LD [r16],A
+    {
+        _mmu.WriteByteToAddress(registerPair.Word, Af.High);
+        Pc += 2;
+    }
+    
+    public void WriteImmediateMemoryLocationA() //LD [n16],A
+    {
+        var tempRegisterPair = new  RegisterPair
+        {
+            Low = _mmu.GetByteFromAddress(Pc += 1),
+            High = _mmu.GetByteFromAddress(Pc += 2)
+        };
+        
+        _mmu.WriteByteToAddress(tempRegisterPair.Word, Af.High);
+        
+        Pc += 3;
+    }
+    
+    public void WriteImmediateHighMemoryLocationA() //LDH [n16],A
+    {
+        var byteAddress = _mmu.GetByteFromAddress((ushort)(Pc + 1));
+
+        var finalAddress = (ushort)(byteAddress + 0xFF00);
+        
+        _mmu.WriteByteToAddress(finalAddress, Af.High);
+        
+        Pc += 2;
+    }
+
+    public void WriteHighMemoryLocationA() //LDH [C],A
+    {
+        _mmu.WriteByteToAddress((ushort)(0xFF00 + Bc.Low), Af.High);
+        
+        Pc += 2;
+    }
+    
+    public void LoadMemoryLocationA(ref RegisterPair registerPair) //LD A,[r16]
+    {
+        var tempAf = Af;
+        tempAf.High = _mmu.GetByteFromAddress(registerPair.Word);
+        Af = tempAf;
+        Pc += 2;
+    }
+
+    public void LoadImmediateMemoryLocationA() //LD A,[n16]
+    {
+        var tempRegister = new RegisterPair
+        {
+            Low = _mmu.GetByteFromAddress((ushort)(Pc + 1)),
+            High = _mmu.GetByteFromAddress((ushort)(Pc + 2))
+        };
+
+        var tempAf = Af;
+        tempAf.High = _mmu.GetByteFromAddress(tempRegister.Word);
+        
+        Af = tempAf;
+        Pc += 4;
+    }
+
+    public void LoadImmediateHighMemoryLocationA() //LDH A,[n16]
+    {
+        var byteAddress = _mmu.GetByteFromAddress((ushort)(Pc + 1));
+        
+        var finalAddress = (ushort)(byteAddress + 0xFF00);
+        
+        var tempAf = Af;
+        
+        tempAf.High = _mmu.GetByteFromAddress(finalAddress);
+        
+        Af = tempAf;
+
+        Pc += 3;
+    }
+
+    public void LoadHighMemoryLocationA() //LDH A,[C]
+    {
+        var tempAf = Af;
+        
+        tempAf.High = _mmu.GetByteFromAddress((ushort)(0xFF00 + Bc.Low));
+        
+        Af = tempAf;
+        
+        Pc += 2;
+    }
+    
+    public void WriteMemoryLocationAInc() //LD [HLI],A
+    {
+        _mmu.WriteByteToAddress(Hl.Word, Af.High);
+
+        Pc += 2;
+        HlInc();
+    }
+    
+    public void WriteMemoryLocationADec() //LD [HLD],A
+    {
+        _mmu.WriteByteToAddress(Hl.Word, Af.High);
+
+        Pc += 2;
+        HlDec();
+    }
+    public void LoadMemoryLocationAInc() //LD A,[HLI]
+    {
+        var value = _mmu.GetByteFromAddress(Hl.Word);
+        
+        var tempAf = Af;
+        
+        tempAf.High = value;
+        
+        Af = tempAf;
+
+        Pc += 2;
+        HlInc();
+    }
+    
+    public void LoadMemoryLocationADec() //LD A,[HLD]
+    {
+        var value = _mmu.GetByteFromAddress(Hl.Word);
+        
+        var tempAf = Af;
+        
+        tempAf.High = value;
+        
+        Af = tempAf;
+
+        Pc += 2;
+        HlDec();
+    }
+
+    public void LoadImmediateStackPointer() //LD SP,n16
+    {
+        var tempRegisterPair = new RegisterPair
+        {
+            Low = _mmu.GetByteFromAddress((ushort)(Pc + 1)),
+            High = _mmu.GetByteFromAddress((ushort)(Pc + 2))
+        };
+
+        Sp = tempRegisterPair.Word;
+        
+        Pc += 3;
+    }
+
+    public void WriteMemoryLocationStackPointer() //LD [n16],SP
+    {
+        var tempRegisterPair = new RegisterPair
+        {
+            Low = _mmu.GetByteFromAddress((ushort)(Pc + 1)),
+            High = _mmu.GetByteFromAddress((ushort)(Pc + 2))
+        };
+
+        _mmu.WriteByteToAddress(tempRegisterPair.Word, (byte)(Sp & 0xFF));
+        _mmu.WriteByteToAddress((ushort)(tempRegisterPair.Word + 1), (byte)(Sp >> 8));
+
+        Pc += 3;
+    }
+
+    public void LoadHlStackPointerPlusE()
+    {
+        var offset = (sbyte)_mmu.GetByteFromAddress((ushort)(Pc + 1));
+
+        var tempHl = Hl;
+
+        tempHl.Word = (ushort)(tempHl.Word + offset);
+        
+        Hl = tempHl;
+        
+        SetZeroFlag(false);
+        SetSubtractionFlag(false);
+        
+        var halfCarry = ((Sp & 0x000F) + (offset & 0x000F)) > 0x000F;
+        SetHalfCarryFlag(halfCarry);
+        
+        SetCarryFlag(((Sp & 0x00FF) + (offset & 0x00FF)) > 0x00FF);
+        
+        Pc += 2;
+    }
+    
     private void Add(byte value)
     {
         var tempAf = Af;
@@ -74,7 +310,7 @@ public class Cpu
         tempAf.High = (byte) result;
         Af = tempAf;
         
-        SetZeroFlag(result == 0);
+        SetZeroFlag((byte)result == 0);
         
         SetSubtractionFlag(false);
         
@@ -83,6 +319,7 @@ public class Cpu
         var halfCarry = ((Af.High & 0x000F) + (result & 0x000F)) > 0x00FF;
         SetHalfCarryFlag(halfCarry);
     }
+    
     private void AddReg(byte opcode)
     {
         switch (opcode - 0x80)
@@ -109,9 +346,5 @@ public class Cpu
                 Add(Af.High);
                 break;
         }
-    }
-    public void RunOpcode(byte opcode)
-    {
-        
     }
 }
