@@ -8,10 +8,14 @@ public class Cpu(Mmu.Mmu mmu)
     public ushort Sp { get; private set; } //Stack Pointer 
     
     //Main Register Set
-    public RegisterPair Af { get; private set; } //Accumulator A
-    public RegisterPair Bc { get; private set; } //Accumulator B
-    public RegisterPair De { get; private set; } //Accumulator D
-    public RegisterPair Hl { get; private set; } //Accumulator H
+    private RegisterPair _af;
+    private RegisterPair _bc;
+    private RegisterPair _de;
+    private RegisterPair _hl;
+    public RegisterPair Af { get => _af; private set => _af = value; } //Accumulator A
+    public RegisterPair Bc { get => _bc; private set => _bc = value;  } //Accumulator B
+    public RegisterPair De { get => _de; private set => _de = value;  } //Accumulator D
+    public RegisterPair Hl { get => _hl; private set => _hl = value;  } //Accumulator H
 
     private void SetZeroFlag(bool condition)
     {
@@ -67,25 +71,38 @@ public class Cpu(Mmu.Mmu mmu)
     }
     public void RunOpcode(byte opcode)
     {
-        
+        switch (opcode)
+        {
+            case 0x00:
+                NoOperation();
+                break;
+            case 0x01:
+                LoadImmediate16(ref _bc);
+                break;
+            case 0x02:
+                WriteMemoryLocationA(ref _bc);
+                break;
+            case 0x06:
+                LoadImmediate8(ref _bc.Low);
+                break;
+        }
     }
-    
-    public void NoOp() => Pc++;
 
-    public void HlInc()
+    private void HlInc()
     {
         var tempHl = Hl;
         tempHl.Word++;
         Hl = tempHl;
     }
     
-    public void HlDec()
+    private void HlDec()
     {
         var tempHl = Hl;
         tempHl.Word--;
         Hl = tempHl;
     }
     
+    //Load Instructions
     public void LoadRegister(ref byte registerWrite, ref byte registerRead) //LD r8,r8
     {
         registerWrite = registerRead;
@@ -252,7 +269,28 @@ public class Cpu(Mmu.Mmu mmu)
         Pc += 2;
         HlDec();
     }
+    
+    //8-bit arithmetic instructions
+    private void Add(byte value)
+    {
+        var tempAf = Af;
+        var originalA = Af.High;
+        var result = (ushort) (originalA + value);
+        
+        tempAf.High = (byte) result;
+        Af = tempAf;
+        
+        SetZeroFlag((byte)result == 0);
+        
+        SetSubtractionFlag(false);
+        
+        SetCarryFlag(result > 0x00FF);
+        
+        var halfCarry = ((Af.High & 0x000F) + (result & 0x000F)) > 0x00FF;
+        SetHalfCarryFlag(halfCarry);
+    }
 
+    //Stack manipulation instructions
     public void LoadImmediateStackPointer() //LD SP,n16
     {
         var tempRegisterPair = new RegisterPair
@@ -301,50 +339,6 @@ public class Cpu(Mmu.Mmu mmu)
         Pc += 2;
     }
     
-    private void Add(byte value)
-    {
-        var tempAf = Af;
-        var originalA = Af.High;
-        var result = (ushort) (originalA + value);
-        
-        tempAf.High = (byte) result;
-        Af = tempAf;
-        
-        SetZeroFlag((byte)result == 0);
-        
-        SetSubtractionFlag(false);
-        
-        SetCarryFlag(result > 0x00FF);
-        
-        var halfCarry = ((Af.High & 0x000F) + (result & 0x000F)) > 0x00FF;
-        SetHalfCarryFlag(halfCarry);
-    }
-    
-    private void AddReg(byte opcode)
-    {
-        switch (opcode - 0x80)
-        {
-            case 0x0:
-                Add(Bc.High);
-                break;
-            case 0x1:
-                Add(Bc.Low);
-                break;
-            case 0x2:
-                Add(De.High);
-                break;
-            case 0x3:
-                Add(De.Low);
-                break;
-            case 0x4:
-                Add(Hl.High);
-                break;
-            case 0x5:
-                Add(Hl.Low);
-                break;
-            case 0x6:
-                Add(Af.High);
-                break;
-        }
-    }
+    //Miscellaneous instructions
+    private void NoOperation() => Pc++;
 }

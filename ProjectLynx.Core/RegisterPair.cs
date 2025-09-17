@@ -1,18 +1,16 @@
-﻿namespace ProjectLynx.Core;
+﻿using System.Runtime.InteropServices;
 
+namespace ProjectLynx.Core;
+
+[StructLayout(LayoutKind.Explicit)]
 public struct RegisterPair
 {
+    [FieldOffset(0)]
     public ushort Word;
+    
+    [FieldOffset(0)]
+    public byte Low;
 
-    public byte High
-    {
-        get => (byte)(Word >> 8);
-        set => Word = (ushort)(value << 8 | (Word & 0xFF00));
-    }
-
-    public byte Low
-    {
-        get => (byte)(Word & 0x00FF);
-        set => Word = (ushort)((Word & 0xFF00) | value);
-    }
+    [FieldOffset(1)] 
+    public byte High;
 }
