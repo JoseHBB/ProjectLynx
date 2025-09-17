@@ -85,6 +85,225 @@ public class Cpu(Mmu.Mmu mmu)
             case 0x06:
                 LoadImmediate8(ref _bc.Low);
                 break;
+            case 0x0A:
+                LoadMemoryLocationA(ref _bc);
+                break;
+            case 0x11:
+                LoadImmediate16(ref _de);
+                break;
+            case 0x12:
+                WriteMemoryLocationA(ref _de);
+                break;
+            case 0x16:
+                LoadImmediate8(ref _de.Low);
+                break;
+            case 0x1A:
+                LoadMemoryLocationA(ref _de);
+                break;
+            case 0x21:
+                LoadImmediate16(ref _hl);
+                break;
+            case 0x22:
+                WriteMemoryLocationAInc();
+                break;
+            case 0x26:
+                LoadImmediate8(ref _hl.Low);
+                break;
+            case 0x2A:
+                LoadMemoryLocationAInc();
+                break;
+            case 0x31:
+                WriteMemoryLocationADec();
+                break;
+            case 0x36:
+                WriteImmediateMemoryLocation();
+                break;
+            case 0x3A:
+                LoadMemoryLocationADec();
+                break;
+            case 0x40:
+                LoadRegister(ref _bc.High, ref _bc.High);
+                break;
+            case 0x41:
+                LoadRegister(ref _bc.High, ref _bc.Low);
+                break;
+            case 0x42:
+                LoadRegister(ref _bc.High, ref _de.High);
+                break;
+            case 0x43:
+                LoadRegister(ref _bc.High, ref _de.Low);
+                break;
+            case 0x44:
+                LoadRegister(ref _bc.High, ref _hl.High);
+                break;
+            case 0x45:
+                LoadRegister(ref _bc.High, ref _hl.Low);
+                break;
+            case 0x46:
+                LoadMemoryLocation(ref _bc.High);
+                break;
+            case 0x47:
+                LoadRegister(ref _bc.High, ref _af.High);
+                break;
+            case 0x48:
+                LoadRegister(ref _bc.Low, ref _bc.High);
+                break;
+            case 0x49:
+                LoadRegister(ref _bc.Low, ref _bc.Low);
+                break;
+            case 0x4A:
+                LoadRegister(ref _bc.Low, ref _de.High);
+                break;
+            case 0x4B:
+                LoadRegister(ref _bc.Low, ref _de.Low);
+                break;
+            case 0x4C:
+                LoadRegister(ref _bc.Low, ref _hl.High);
+                break;
+            case 0x4D:
+                LoadRegister(ref _bc.Low, ref _hl.Low);
+                break;
+            case 0x50:
+                LoadRegister(ref _de.High, ref _bc.High);
+                break;
+            case 0x51:
+                LoadRegister(ref _de.High, ref _bc.Low);
+                break;
+            case 0x52:
+                LoadRegister(ref _de.High, ref _de.High);
+                break;
+            case 0x53:
+                LoadRegister(ref _de.High, ref  _de.Low);
+                break;
+            case 0x54:
+                LoadRegister(ref _de.High, ref  _hl.High);
+                break;
+            case 0x55:
+                LoadRegister(ref _de.High, ref  _hl.Low);
+                break;
+            case 0x56:
+                LoadMemoryLocation(ref _de.High);
+                break;
+            case 0x57:
+                LoadRegister(ref _de.High, ref _af.Low);
+                break;
+            case 0x58:
+                LoadRegister(ref _de.Low, ref _bc.High);
+                break;
+            case 0x59:
+                LoadRegister(ref _de.Low, ref _bc.Low);
+                break;
+            case 0x5A:
+                LoadRegister(ref _de.Low, ref _de.High);
+                break;
+            case 0x5B:
+                LoadRegister(ref _de.Low, ref _de.Low);
+                break;
+            case 0x5C:
+                LoadRegister(ref _de.Low, ref _hl.High);
+                break;
+            case 0x5D:
+                LoadRegister(ref _de.Low, ref _hl.Low);
+                break;
+            case 0x60:
+                LoadRegister(ref _hl.High, ref _bc.High);
+                break;
+            case 0x61:
+                LoadRegister(ref _hl.High, ref _bc.Low);
+                break;
+            case 0x62:
+                LoadRegister(ref _hl.High, ref _de.High);
+                break;
+            case 0x63:
+                LoadRegister(ref _hl.High, ref _de.Low);
+                break;
+            case 0x64:
+                LoadRegister(ref _hl.High, ref _hl.High);
+                break;
+            case 0x65:
+                LoadRegister(ref _hl.High, ref _hl.Low);
+                break;
+            case 0x66:
+                LoadMemoryLocation(ref _hl.High);
+                break;
+            case 0x67:
+                LoadRegister(ref _hl.High, ref _af.High);
+                break;
+            case 0x68:
+                LoadRegister(ref _hl.Low, ref _bc.High);
+                break;
+            case 0x69:
+                LoadRegister(ref _hl.Low, ref _bc.Low);
+                break;
+            case 0x6A:
+                LoadRegister(ref _hl.Low, ref _de.High);
+                break;
+            case 0x6B:
+                LoadRegister(ref _hl.Low, ref _de.Low);
+                break;
+            case 0x6C:
+                LoadRegister(ref _hl.Low, ref _hl.High);
+                break;
+            case 0x6D:
+                LoadRegister(ref _hl.Low, ref _hl.Low);
+                break;
+            case 0x70:
+                WriteMemoryLocation(ref _bc.High);
+                break;
+            case 0x71:
+                WriteMemoryLocation(ref _bc.Low);
+                break;
+            case 0x72:
+                WriteMemoryLocation(ref _de.High);
+                break;
+            case 0x73:
+                WriteMemoryLocation(ref _de.Low);
+                break;
+            case 0x74:
+                WriteMemoryLocation(ref _hl.High);
+                break;
+            case 0x75:
+                WriteMemoryLocation(ref _hl.Low);
+                break;
+            case 0x77:
+                WriteMemoryLocation(ref _af.High);
+                break;
+            case 0x78:
+                LoadRegister(ref _af.High, ref _bc.High);
+                break;
+            case 0x79:
+                LoadRegister(ref _af.High, ref _bc.Low);
+                break;
+            case 0x7A:
+                LoadRegister(ref _af.High, ref _de.High);   
+                break;
+            case 0x7B:
+                LoadRegister(ref _af.High, ref _de.Low);
+                break;
+            case 0x7C:
+                LoadRegister(ref _af.High, ref _hl.High);
+                break;
+            case 0x7D:
+                LoadRegister(ref _af.High, ref _hl.Low);
+                break;
+            case 0xE0:
+                WriteImmediateHighMemoryLocationA();
+                break;
+            case 0xE2:
+                WriteHighMemoryLocationA();
+                break;
+            case 0xEA:
+                WriteImmediateMemoryLocationA();
+                break;
+            case 0xF0:
+                LoadImmediateHighMemoryLocationA();
+                break;
+            case 0xF2:
+                LoadHighMemoryLocationA();
+                break;
+            case 0xFA:
+                LoadImmediateMemoryLocationA();
+                break;
         }
     }
 
