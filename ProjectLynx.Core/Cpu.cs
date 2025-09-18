@@ -1,8 +1,11 @@
-﻿namespace ProjectLynx.Core;
+﻿using System.Security.Principal;
+using ProjectLynx.Memory;
 
-public class Cpu(Mmu.Mmu mmu)
+namespace ProjectLynx.Core;
+
+public class Cpu(Mmu mmu)
 {
-    private Mmu.Mmu _mmu = mmu;
+    private Mmu _mmu = mmu;
     //Special Purpose Registers
     public ushort Pc { get; private set; } //Program Counter
     public ushort Sp { get; private set; } //Stack Pointer 
@@ -17,6 +20,32 @@ public class Cpu(Mmu.Mmu mmu)
     public RegisterPair De { get => _de; private set => _de = value;  } //Accumulator D
     public RegisterPair Hl { get => _hl; private set => _hl = value;  } //Accumulator H
 
+    private void PrintCpuData()
+    {
+        Console.WriteLine($"Pc: {Pc:X4}");
+        Console.WriteLine($"Sp: {Sp:X4}");
+        Console.WriteLine($"Af: {_af.Word:X4}");
+        Console.WriteLine($"Bc: {_bc.Word:X4}");
+        Console.WriteLine($"De: {_de.Word:X4}");
+        Console.WriteLine($"Hl: {_hl.Word:X4}");
+    }
+    public void Start()
+    {
+        byte opcode;
+        while (true)
+        {
+            opcode = _mmu.GetByteFromAddress(Pc);
+            
+            RunOpcode(opcode);
+            PrintCpuData();
+            
+            //var keyInfo = Console.ReadKey(true);
+            
+            //while (keyInfo.Key != ConsoleKey.Spacebar)
+            //{
+            //}
+        }
+    }
     private void SetZeroFlag(bool condition)
     {
         var tempAf = Af;

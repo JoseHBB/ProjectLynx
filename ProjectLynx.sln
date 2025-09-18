@@ -4,9 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLynx.Core", "Project
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLynx.Console", "ProjectLynx.Console\ProjectLynx.Console.csproj", "{8ED75A70-2EC8-42E4-9D91-B16CBDDBEFFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLynx.Rom", "ProjectLynx.Rom\ProjectLynx.Rom.csproj", "{63FA2D39-486C-4A0F-BE1D-43B0B440C8BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLynx.Miscellaneous", "ProjectLynx.Miscellaneous\ProjectLynx.Miscellaneous.csproj", "{63FA2D39-486C-4A0F-BE1D-43B0B440C8BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLynx.Mmu", "ProjectLynx.Mmu\ProjectLynx.Mmu.csproj", "{CADDCDD7-9CB0-48CE-906B-19CAADCBA608}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLynx.Memory", "ProjectLynx.Memory\ProjectLynx.Memory.csproj", "{CADDCDD7-9CB0-48CE-906B-19CAADCBA608}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

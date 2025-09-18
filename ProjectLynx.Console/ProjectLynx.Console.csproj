@@ -7,9 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\ProjectLynx.Core\ProjectLynx.Core.csproj" />
-      <ProjectReference Include="..\ProjectLynx.Rom\ProjectLynx.Rom.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectLynx.Core\ProjectLynx.Core.csproj" />
+    <ProjectReference Include="..\ProjectLynx.Miscellaneous\ProjectLynx.Miscellaneous.csproj" />
+    <ProjectReference Include="..\ProjectLynx.Memory\ProjectLynx.Memory.csproj" />
+  </ItemGroup>
 
 </Project>

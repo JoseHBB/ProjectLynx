@@ -1,4 +1,4 @@
-﻿namespace ProjectLynx.Mmu;
+﻿namespace ProjectLynx.Memory;
 
 public class Cartridge(string romPath)
 {

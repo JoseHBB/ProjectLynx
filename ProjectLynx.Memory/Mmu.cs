@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace ProjectLynx.Mmu;
+﻿namespace ProjectLynx.Memory;
 
 public class Mmu(string romPath)
 {

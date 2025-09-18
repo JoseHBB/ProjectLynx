@@ -1,4 +1,4 @@
-﻿namespace ProjectLynx.Rom;
+﻿namespace ProjectLynx.Miscellaneous;
 
 public class Rom(string romPath)
 {

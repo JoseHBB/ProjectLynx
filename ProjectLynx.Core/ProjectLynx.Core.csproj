@@ -7,8 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ProjectLynx.Mmu\ProjectLynx.Mmu.csproj" />
-      <ProjectReference Include="..\ProjectLynx.Rom\ProjectLynx.Rom.csproj" />
+      <ProjectReference Include="..\ProjectLynx.Memory\ProjectLynx.Memory.csproj" />
     </ItemGroup>
 
 </Project>
