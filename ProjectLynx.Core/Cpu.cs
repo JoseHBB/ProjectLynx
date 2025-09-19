@@ -1,5 +1,4 @@
-﻿using System.Security.Principal;
-using ProjectLynx.Memory;
+﻿using ProjectLynx.Memory;
 
 namespace ProjectLynx.Core;
 
@@ -112,10 +111,13 @@ public class Cpu(Mmu mmu)
                 WriteMemoryLocationA(ref _bc);
                 break;
             case 0x06:
-                LoadImmediate8(ref _bc.Low);
+                LoadImmediate8(ref _bc.High);
                 break;
             case 0x0A:
                 LoadMemoryLocationA(ref _bc);
+                break;
+            case 0x0E:
+                LoadImmediate8(ref _bc.Low);
                 break;
             case 0x11:
                 LoadImmediate16(ref _de);
@@ -124,10 +126,13 @@ public class Cpu(Mmu mmu)
                 WriteMemoryLocationA(ref _de);
                 break;
             case 0x16:
-                LoadImmediate8(ref _de.Low);
+                LoadImmediate8(ref _de.High);
                 break;
             case 0x1A:
                 LoadMemoryLocationA(ref _de);
+                break;
+            case 0x1E:
+                LoadImmediate8(ref _de.Low);
                 break;
             case 0x21:
                 LoadImmediate16(ref _hl);
@@ -136,10 +141,13 @@ public class Cpu(Mmu mmu)
                 WriteMemoryLocationAInc();
                 break;
             case 0x26:
-                LoadImmediate8(ref _hl.Low);
+                LoadImmediate8(ref _hl.High);
                 break;
             case 0x2A:
                 LoadMemoryLocationAInc();
+                break;
+            case 0x2E:
+                LoadImmediate8(ref _hl.Low);
                 break;
             case 0x31:
                 WriteMemoryLocationADec();
@@ -149,6 +157,9 @@ public class Cpu(Mmu mmu)
                 break;
             case 0x3A:
                 LoadMemoryLocationADec();
+                break;
+            case 0x3E:
+                LoadImmediate8(ref _af.High);
                 break;
             case 0x40:
                 LoadRegister(ref _bc.High, ref _bc.High);
@@ -192,6 +203,12 @@ public class Cpu(Mmu mmu)
             case 0x4D:
                 LoadRegister(ref _bc.Low, ref _hl.Low);
                 break;
+            case 0x4E:
+                LoadMemoryLocation(ref _bc.Low);
+                break;
+            case 0x4F:
+                LoadRegister(ref _bc.Low, ref _af.High);
+                break;
             case 0x50:
                 LoadRegister(ref _de.High, ref _bc.High);
                 break;
@@ -233,6 +250,12 @@ public class Cpu(Mmu mmu)
                 break;
             case 0x5D:
                 LoadRegister(ref _de.Low, ref _hl.Low);
+                break;
+            case 0x5E:
+                LoadMemoryLocation(ref _de.Low);
+                break;
+            case 0x5F:
+                LoadRegister(ref _de.Low, ref _af.High);
                 break;
             case 0x60:
                 LoadRegister(ref _hl.High, ref _bc.High);
@@ -276,6 +299,12 @@ public class Cpu(Mmu mmu)
             case 0x6D:
                 LoadRegister(ref _hl.Low, ref _hl.Low);
                 break;
+            case 0x6E:
+                LoadMemoryLocation(ref _hl.Low);
+                break;
+            case 0x6F:
+                LoadRegister(ref _hl.Low, ref _af.High);
+                break;
             case 0x70:
                 WriteMemoryLocation(ref _bc.High);
                 break;
@@ -314,6 +343,12 @@ public class Cpu(Mmu mmu)
                 break;
             case 0x7D:
                 LoadRegister(ref _af.High, ref _hl.Low);
+                break;
+            case 0x7E:
+                LoadMemoryLocation(ref _af.High);
+                break;
+            case 0x7F:
+                LoadRegister(ref _af.High, ref _af.High);
                 break;
             case 0xE0:
                 WriteImmediateHighMemoryLocationA();
